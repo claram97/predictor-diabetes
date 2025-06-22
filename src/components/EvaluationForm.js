@@ -4,11 +4,16 @@ import { useFormik } from 'formik';
 import { formFields, validationSchema, initialValues } from '../app/evaluacion/form.config.js';
 import styles from '../app/evaluacion/evaluation.module.css';
 
+// La ruta de tu importación está perfecta si te funciona así.
 import { predict } from '../services';
 
 export default function EvaluationForm() {
   const token = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [apiError, setApiError] = useState(null);
+  
+  // =================================================================
+  // CAMBIO 1: El estado 'result' ahora guardará un objeto completo.
+  // =================================================================
   const [result, setResult] = useState(null);
 
   const formik = useFormik({
@@ -25,13 +30,38 @@ export default function EvaluationForm() {
         
         const predictionData = await predict(dataToPredict, token);
         
-        setResult(predictionData.predictions[0].value); 
+        // =================================================================
+        // CAMBIO 2: Procesamos la nueva respuesta detallada del modelo.
+        // =================================================================
+        const firstPrediction = predictionData.predictions[0];
+        const scores = firstPrediction.scores;
+        const classes = firstPrediction.classes;
+
+        // Encontramos el score más alto y su posición
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+        
+        // La clase predicha es la que está en la misma posición que el score más alto
+        const predictedClass = classes[maxScoreIndex];
+
+        // Guardamos un objeto con toda la información útil en nuestro estado
+        setResult({
+          predictedClass: parseInt(predictedClass), // Convertimos el "0" o "1" a número
+          confidence: maxScore,
+          allScores: scores.map((score, index) => ({
+            class: classes[index],
+            score: score
+          }))
+        });
 
       } catch (err) {
         setApiError(err.message);
       }
     },
   });
+
+  // Pequeña función de ayuda para formatear números a porcentaje
+  const formatPercent = (n) => `${(n * 100).toFixed(1)}%`;
 
   return (
     <div className={styles.mainContent}>
@@ -109,37 +139,53 @@ export default function EvaluationForm() {
             </div>
           )}
 
-          {result !== null && (
-            <div className={`${styles.resultCard} ${result === 1 ? styles.riesgoAlto : styles.riesgoBajo}`}>
-              <div className={styles.resultIcon}>
-                {result === 1 ? '⚠️' : '✅'}
+           {result !== null && (
+          <div className={`${styles.resultCard} ${result.predictedClass === 1 ? styles.riesgoAlto : styles.riesgoBajo}`}>
+            <div className={styles.resultIcon}>
+              {result.predictedClass === 1 ? '⚠️' : '✅'}
+            </div>
+            <div className={styles.resultContent}>
+              <div className={styles.resultTitle}>
+                {result.predictedClass === 1 ? 'Riesgo Elevado Detectado' : 'Riesgo Bajo Detectado'}
+                {/* Añadimos la insignia de confianza */}
+                <span className={styles.confidenceBadge}>
+                  Confianza: {formatPercent(result.confidence)}
+                </span>
               </div>
-              <div className={styles.resultContent}>
-                <div className={styles.resultTitle}>
-                  {result === 1 ? 'Riesgo Elevado Detectado' : 'Riesgo Bajo Detectado'}
+              <p className={styles.resultText}>
+                {result.predictedClass === 1
+                  ? 'El modelo de IA estima un riesgo elevado de desarrollar Diabetes Mellitus tipo 2. Se recomienda evaluación clínica adicional.'
+                  : 'El modelo de IA estima un riesgo bajo de desarrollar Diabetes Mellitus tipo 2. Continúe con el seguimiento preventivo habitual.'
+                }
+              </p>
+                <div className={styles.scoresBreakdown}>
+                <div className={styles.scoreItem}>
+                  <span>Prob. Riesgo Bajo (Clase 0):</span>
+                  <strong>{formatPercent(result.allScores.find(s => s.class === '0').score)}</strong>
                 </div>
-                <p className={styles.resultText}>
-                  {result === 1
-                    ? 'El modelo de IA estima un riesgo elevado de desarrollar Diabetes Mellitus tipo 2. Se recomienda evaluación clínica adicional.'
-                    : 'El modelo de IA estima un riesgo bajo de desarrollar Diabetes Mellitus tipo 2. Continúe con el seguimiento preventivo habitual.'
-                  }
-                </p>
-                <div className={styles.resultActions}>
-                  <button className={styles.actionButton} onClick={() => window.print()}>
-                    📄 Imprimir Reporte
-                  </button>
-                  <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
-                    🔄 Nueva Evaluación
-                  </button>
+                <div className={styles.scoreItem}>
+                  <span>Prob. Riesgo Alto (Clase 1):</span>
+                  <strong>{formatPercent(result.allScores.find(s => s.class === '1').score)}</strong>
                 </div>
-                <div className={styles.resultDisclaimer}>
-                  <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico. 
-                  No reemplaza el criterio clínico profesional ni el diagnóstico médico integral.
-                </div>
+              </div>
+
+              <div className={styles.resultActions}>
+                <button className={styles.actionButton} onClick={() => window.print()}>
+                  📄 Imprimir Reporte
+                </button>
+                {/* Corregimos el botón para que también limpie el formulario */}
+                <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
+                  🔄 Nueva Evaluación
+                </button>
+              </div>
+              <div className={styles.resultDisclaimer}>
+                <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico. 
+                No reemplaza el criterio clínico profesional ni el diagnóstico médico integral.
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
+    </div>
   );
 }

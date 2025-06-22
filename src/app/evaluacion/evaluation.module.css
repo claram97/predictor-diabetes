@@ -492,3 +492,39 @@
     justify-content: center;
   }
 }
+
+.confidenceBadge {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: inherit;
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
+.scoresBreakdown {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
+
+.scoreItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.scoreItem + .scoreItem {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.scoreItem span {
+  opacity: 0.9;
+}
