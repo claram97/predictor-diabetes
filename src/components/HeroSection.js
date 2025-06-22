@@ -1,13 +1,10 @@
 "use client";
 
+import Link from 'next/link';
 import styles from '../app/page.module.css';
 import FeatureCard from './FeatureCard';
 
 export default function HeroSection() {
-  
-  const handleButtonClick = () => {
-    alert('Próximamente: serás redirigido al formulario de evaluación clínica.');
-  };
 
   return (
     <div className={styles.hero}>
@@ -44,10 +41,10 @@ export default function HeroSection() {
           />
         </div>
         
-        <button onClick={handleButtonClick} className={styles.ctaButton}>
+        <Link href="/evaluacion" className={styles.ctaButton}>
           <span>Iniciar Evaluación Clínica</span>
           <div className={styles.buttonIcon}>→</div>
-        </button>
+        </Link>
         
         <div className={styles.disclaimer}>
           <div className={styles.disclaimerIcon}>⚠️</div>
