@@ -4,6 +4,8 @@ import { useFormik } from 'formik';
 import { formFields, validationSchema, initialValues } from '../app/evaluacion/form.config.js';
 import styles from '../app/evaluacion/evaluation.module.css';
 
+import { predict } from '../services';
+
 export default function EvaluationForm() {
   const [apiError, setApiError] = useState(null);
   const [result, setResult] = useState(null);
@@ -11,30 +13,26 @@ export default function EvaluationForm() {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: async (values, { setSubmitting }) => { // Formik te da `setSubmitting`
+    onSubmit: async (values) => {
       setApiError(null);
       setResult(null);
-      
+
       try {
-        const response = await fetch('/api/predict', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(values),
-        });
+        const dataToPredict = {
+          instances: [values] 
+        };
         
-        if (!response.ok) throw new Error('Error en la comunicación con el servidor.');
+        const predictionData = await predict(dataToPredict);
         
-        const predictionData = await response.json();
-        setResult(predictionData.prediction);
+        setResult(predictionData.predictions[0].value); 
+
       } catch (err) {
         setApiError(err.message);
       }
-     },
+    },
   });
 
   return (
-    // Quitamos el pageContainer y el header principal de aquí.
-    // Empezamos directamente con el contenido principal.
     <div className={styles.mainContent}>
       <div className={styles.formContainer}>
         <div className={styles.formHeader}>
@@ -129,7 +127,7 @@ export default function EvaluationForm() {
                   <button className={styles.actionButton} onClick={() => window.print()}>
                     📄 Imprimir Reporte
                   </button>
-                  <button className={styles.actionButton} onClick={() => setResult(null)}>
+                  <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
                     🔄 Nueva Evaluación
                   </button>
                 </div>
