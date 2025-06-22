@@ -7,6 +7,7 @@ import styles from '../app/evaluacion/evaluation.module.css';
 import { predict } from '../services';
 
 export default function EvaluationForm() {
+  const token = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [apiError, setApiError] = useState(null);
   const [result, setResult] = useState(null);
 
@@ -22,7 +23,7 @@ export default function EvaluationForm() {
           instances: [values] 
         };
         
-        const predictionData = await predict(dataToPredict);
+        const predictionData = await predict(dataToPredict, token);
         
         setResult(predictionData.predictions[0].value); 
 
