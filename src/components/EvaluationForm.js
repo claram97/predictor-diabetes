@@ -4,17 +4,12 @@ import { useFormik } from 'formik';
 import { formFields, validationSchema, initialValues } from '../app/evaluacion/form.config.js';
 import styles from '../app/evaluacion/evaluation.module.css';
 
-// La ruta de tu importación está perfecta si te funciona así.
 import { predict } from '../services';
 
 export default function EvaluationForm() {
   const token = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [apiError, setApiError] = useState(null);
-  
-  // =================================================================
-  // CAMBIO 1: El estado 'result' ahora guardará un objeto completo.
-  // =================================================================
-  const [result, setResult] = useState(null);
+    const [result, setResult] = useState(null);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -24,29 +19,30 @@ export default function EvaluationForm() {
       setResult(null);
 
       try {
+        const stringValues = {};
+        for (const key in values) {
+          stringValues[key] = String(values[key]);
+        }
+
         const dataToPredict = {
-          instances: [values] 
+          instances: [stringValues] 
         };
+
+        console.log(dataToPredict);
         
         const predictionData = await predict(dataToPredict, token);
         
-        // =================================================================
-        // CAMBIO 2: Procesamos la nueva respuesta detallada del modelo.
-        // =================================================================
         const firstPrediction = predictionData.predictions[0];
         const scores = firstPrediction.scores;
         const classes = firstPrediction.classes;
 
-        // Encontramos el score más alto y su posición
         const maxScore = Math.max(...scores);
         const maxScoreIndex = scores.indexOf(maxScore);
         
-        // La clase predicha es la que está en la misma posición que el score más alto
         const predictedClass = classes[maxScoreIndex];
 
-        // Guardamos un objeto con toda la información útil en nuestro estado
         setResult({
-          predictedClass: parseInt(predictedClass), // Convertimos el "0" o "1" a número
+          predictedClass: parseInt(predictedClass),
           confidence: maxScore,
           allScores: scores.map((score, index) => ({
             class: classes[index],
@@ -60,7 +56,6 @@ export default function EvaluationForm() {
     },
   });
 
-  // Pequeña función de ayuda para formatear números a porcentaje
   const formatPercent = (n) => `${(n * 100).toFixed(1)}%`;
 
   return (
@@ -128,7 +123,6 @@ export default function EvaluationForm() {
             </button>
           </div>
         </form>
-          {/* Resultados */}
           {apiError && (
             <div className={`${styles.resultCard} ${styles.errorCard}`}>
               <div className={styles.resultIcon}>❌</div>
@@ -147,7 +141,6 @@ export default function EvaluationForm() {
             <div className={styles.resultContent}>
               <div className={styles.resultTitle}>
                 {result.predictedClass === 1 ? 'Riesgo Elevado Detectado' : 'Riesgo Bajo Detectado'}
-                {/* Añadimos la insignia de confianza */}
                 <span className={styles.confidenceBadge}>
                   Confianza: {formatPercent(result.confidence)}
                 </span>
@@ -173,7 +166,6 @@ export default function EvaluationForm() {
                 <button className={styles.actionButton} onClick={() => window.print()}>
                   📄 Imprimir Reporte
                 </button>
-                {/* Corregimos el botón para que también limpie el formulario */}
                 <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
                   🔄 Nueva Evaluación
                 </button>
