@@ -1,3 +1,36 @@
+# Cómo correr el proyecto
+En la raíz correr el comando:
+`python3.11 -m venv predictor_diabetes`
+Está en el gitignore así que no se pushea, cada uno tiene la suya y solo es necesario crearla una vez.
+Luego, antes de correr el proyecto, siempre hay que hacer:
+`source predictor_diabetes/bin/activate`
+Eso hay que correrlo cada vez que se abre una terminal nueva.
+Luego, por única vez, se instalan las dependencias:
+`pip install numpy pandas scikit-learn fastapi uvicorn joblib seaborn matplotlib fastapi uvicorn pycaret`
+Y luego, por única vez, downgradeamos a esta versión de scikit-learn:
+`pip install scikit-learn==1.4.2`
+
+A partir de eso:
+- Vamos a la carpeta model_training.
+- Si les da curiosidad, pueden correr el comando python3 compare_models.py. Tarda un raaaaaaato, e imprime una comparación entre distintos modelos. No es necesario correrlo.
+- Correr python3 train_diabetes_predictor.py. Eso genera el modelo y el scaler, y además unas imágenes que son parte del análisis exploratorio de datos.
+- Por último salir de la carpeta model_training e ir a la carpeta backend.
+- En la carpeta backend corren uvicorn predict_diabetes_api:app --reload. Ese comando levanta el back con el modelo. Si tienen errores preguntenle a ChatGPT.
+- Una vez que levantó el back ya se puede hacer curl y responde:
+```bash
+curl -X POST "http://127.0.0.1:8000/predict/logistic_regression" \
+-H "Content-Type: application/json" \
+-d '{
+  "Pregnancies": 2,
+  "Glucose": 130,
+  "Insulin": 85,
+  "BMI": 28.5,
+  "DiabetesPedigreeFunction": 0.5,
+  "Age": 45
+}'
+```
+Ese endpoint se puede llamar desde el front para predecir :)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
