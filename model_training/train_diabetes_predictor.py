@@ -37,11 +37,10 @@ plt.close()
 # =======================
 
 # Variables a descartar
-# vars_a_descartar = ['BloodPressure', 'SkinThickness'] # Dieron poca correlación
+vars_a_descartar = ['BloodPressure', 'SkinThickness'] # Dieron poca correlación
 
 # Quitar esas columnas
-# X = df.drop(['Outcome'] + vars_a_descartar, axis=1)
-X = df.drop(['Outcome'], axis=1)
+X = df.drop(['Outcome'] + vars_a_descartar, axis=1)
 
 y = df['Outcome']
 
@@ -92,6 +91,6 @@ plt.close()
 # =======================
 # 7. Guardar modelo y scaler
 # =======================
-joblib.dump(model, 'modelo_lr.pkl')
-joblib.dump(scaler, 'scaler.pkl')
+joblib.dump(model, '../model_training/modelo_lr.pkl')
+joblib.dump(scaler, '../model_training/scaler.pkl')
 print("\nModelo y scaler guardados correctamente.")
