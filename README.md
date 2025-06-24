@@ -1,22 +1,57 @@
 # Cómo correr el proyecto
-En la raíz correr el comando:
-`python3.11 -m venv predictor_diabetes`
-Está en el gitignore así que no se pushea, cada uno tiene la suya y solo es necesario crearla una vez.
-Luego, antes de correr el proyecto, siempre hay que hacer:
-`source predictor_diabetes/bin/activate`
-Eso hay que correrlo cada vez que se abre una terminal nueva.
-Luego, por única vez, se instalan las dependencias:
-`pip install numpy pandas scikit-learn fastapi uvicorn joblib seaborn matplotlib fastapi uvicorn pycaret`
-Y luego, por única vez, downgradeamos a esta versión de scikit-learn:
-`pip install scikit-learn==1.4.2`
 
-A partir de eso:
-- Vamos a la carpeta model_training.
-- Si les da curiosidad, pueden correr el comando python3 compare_models.py. Tarda un raaaaaaato, e imprime una comparación entre distintos modelos. No es necesario correrlo.
-- Correr python3 train_diabetes_predictor.py. Eso genera el modelo y el scaler, y además unas imágenes que son parte del análisis exploratorio de datos.
-- Por último salir de la carpeta model_training e ir a la carpeta backend.
-- En la carpeta backend corren uvicorn predict_diabetes_api:app --reload. Ese comando levanta el back con el modelo. Si tienen errores preguntenle a ChatGPT.
-- Una vez que levantó el back ya se puede hacer curl y responde:
+## Crear el entorno virtual (solo una vez)
+```python3 -m venv .venv```
+
+## Activar el entorno (cada vez que abras una terminal nueva)
+```source .venv/bin/activate```
+
+## Instalar dependencias (solo una vez)
+```pip install -r requirements.txt```
+
+# Entrenamiento del modelo y ejecución del backend
+
+## 1. Entrenar el modelo
+
+Navegar a la carpeta de entrenamiento:
+```bash
+cd model_training
+```
+
+### Comparación de modelos (opcional)
+Si quieres ver una comparación entre diferentes algoritmos de machine learning:
+```bash
+python3 compare_models.py
+```
+> ⚠️ **Nota**: Este comando tarda varios minutos en ejecutarse. Es completamente opcional.
+
+### Entrenar el modelo principal
+```bash
+python3 train_diabetes_predictor.py
+```
+Este script:
+- Genera el modelo entrenado
+- Crea el scaler para normalización
+- Produce gráficos del análisis exploratorio de datos
+
+## 2. Levantar el backend
+
+Salir de la carpeta de entrenamiento y navegar al backend:
+```bash
+cd ../backend
+```
+
+Iniciar el servidor:
+```bash
+uvicorn predict_diabetes_api:app --reload
+```
+
+El servidor estará disponible en `http://127.0.0.1:8000`
+
+## 3. Probar la API
+
+Una vez que el backend esté corriendo, puedes hacer una predicción:
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/predict/logistic_regression" \
 -H "Content-Type: application/json" \
@@ -29,7 +64,16 @@ curl -X POST "http://127.0.0.1:8000/predict/logistic_regression" \
   "Age": 45
 }'
 ```
-Ese endpoint se puede llamar desde el front para predecir :)
+
+### Parámetros de entrada
+- **Pregnancies**: Número de embarazos
+- **Glucose**: Nivel de glucosa
+- **Insulin**: Nivel de insulina
+- **BMI**: Índice de masa corporal
+- **DiabetesPedigreeFunction**: Función de pedigrí de diabetes
+- **Age**: Edad
+
+La respuesta incluirá la predicción de probabilidad de diabetes.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

@@ -7,9 +7,8 @@ import styles from '../app/evaluacion/evaluation.module.css';
 import { predict } from '../services';
 
 export default function EvaluationForm() {
-  const token = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [apiError, setApiError] = useState(null);
-    const [result, setResult] = useState(null);
+  const [result, setResult] = useState(null);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -19,26 +18,34 @@ export default function EvaluationForm() {
       setResult(null);
 
       try {
+        const requiredFields = {
+          Pregnancies: values.Pregnancies,
+          Glucose: values.Glucose,
+          Insulin: values.Insulin,
+          BMI: values.BMI,
+          DiabetesPedigreeFunction: values.DiabetesPedigreeFunction,
+          Age: values.Age
+        };
+
         const stringValues = {};
-        for (const key in values) {
-          stringValues[key] = String(values[key]);
+        for (const key in requiredFields) {
+          stringValues[key] = String(requiredFields[key]);
         }
 
         const dataToPredict = {
-          instances: [stringValues] 
+          instances: [stringValues]
         };
 
         console.log(dataToPredict);
-        
-        const predictionData = await predict(dataToPredict, token);
-        
+
+        const predictionData = await predict(dataToPredict);
+
         const firstPrediction = predictionData.predictions[0];
         const scores = firstPrediction.scores;
         const classes = firstPrediction.classes;
 
         const maxScore = Math.max(...scores);
         const maxScoreIndex = scores.indexOf(maxScore);
-        
         const predictedClass = classes[maxScoreIndex];
 
         setResult({
@@ -85,9 +92,8 @@ export default function EvaluationForm() {
                     name={field.name}
                     type="number"
                     step={field.step}
-                    className={`${styles.input} ${
-                      formik.touched[field.name] && formik.errors[field.name] ? styles.inputError : ''
-                    } ${formik.touched[field.name] && !formik.errors[field.name] ? styles.inputSuccess : ''}`}
+                    className={`${styles.input} ${formik.touched[field.name] && formik.errors[field.name] ? styles.inputError : ''
+                      } ${formik.touched[field.name] && !formik.errors[field.name] ? styles.inputSuccess : ''}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values[field.name]}
@@ -108,9 +114,9 @@ export default function EvaluationForm() {
           </div>
 
           <div className={styles.submitSection}>
-            <button 
-              type="submit" 
-              className={styles.submitButton} 
+            <button
+              type="submit"
+              className={styles.submitButton}
               disabled={formik.isSubmitting || !formik.isValid}
             >
               <span className={styles.buttonText}>
@@ -123,17 +129,17 @@ export default function EvaluationForm() {
             </button>
           </div>
         </form>
-          {apiError && (
-            <div className={`${styles.resultCard} ${styles.errorCard}`}>
-              <div className={styles.resultIcon}>❌</div>
-              <div className={styles.resultContent}>
-                <div className={styles.resultTitle}>Error en el Procesamiento</div>
-                <p className={styles.resultText}>{apiError}</p>
-              </div>
+        {apiError && (
+          <div className={`${styles.resultCard} ${styles.errorCard}`}>
+            <div className={styles.resultIcon}>❌</div>
+            <div className={styles.resultContent}>
+              <div className={styles.resultTitle}>Error en el Procesamiento</div>
+              <p className={styles.resultText}>{apiError}</p>
             </div>
-          )}
+          </div>
+        )}
 
-           {result !== null && (
+        {result !== null && (
           <div className={`${styles.resultCard} ${result.predictedClass === 1 ? styles.riesgoAlto : styles.riesgoBajo}`}>
             <div className={styles.resultIcon}>
               {result.predictedClass === 1 ? '⚠️' : '✅'}
@@ -151,7 +157,7 @@ export default function EvaluationForm() {
                   : 'El modelo de IA estima un riesgo bajo de desarrollar Diabetes Mellitus tipo 2. Continúe con el seguimiento preventivo habitual.'
                 }
               </p>
-                <div className={styles.scoresBreakdown}>
+              <div className={styles.scoresBreakdown}>
                 <div className={styles.scoreItem}>
                   <span>Prob. Riesgo Bajo (Clase 0):</span>
                   <strong>{formatPercent(result.allScores.find(s => s.class === '0').score)}</strong>
@@ -166,12 +172,12 @@ export default function EvaluationForm() {
                 <button className={styles.actionButton} onClick={() => window.print()}>
                   📄 Imprimir Reporte
                 </button>
-                <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
+                <button className={styles.actionButton} onClick={() => { formik.resetForm(); setResult(null) }}>
                   🔄 Nueva Evaluación
                 </button>
               </div>
               <div className={styles.resultDisclaimer}>
-                <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico. 
+                <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico.
                 No reemplaza el criterio clínico profesional ni el diagnóstico médico integral.
               </div>
             </div>
