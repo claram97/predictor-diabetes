@@ -3,10 +3,23 @@ from pydantic import BaseModel
 import numpy as np
 import joblib
 import traceback
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Diabetes Prediction API")
 
-# Cargar modelo y scaler al iniciar la app
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 try:
     model_lr = joblib.load("../model_training/modelo_lr.pkl")
     scaler = joblib.load("../model_training/scaler.pkl")
@@ -16,7 +29,6 @@ except Exception:
     model_lr = None
     scaler = None
 
-# Modelo input para validar entrada JSON (con todas las columnas)
 class PatientData(BaseModel):
     Pregnancies: float
     Glucose: float
@@ -30,7 +42,6 @@ def predict_lr(data: PatientData):
     if model_lr is None or scaler is None:
         raise HTTPException(status_code=500, detail="Modelo LR o scaler no disponibles")
     try:
-        # Orden correcto de columnas para el modelo y scaler
         X = np.array([[data.Pregnancies, data.Glucose, data.Insulin, data.BMI,
                        data.DiabetesPedigreeFunction, data.Age]])
         X_scaled = scaler.transform(X)

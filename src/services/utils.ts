@@ -12,6 +12,7 @@ export const stdFetch = async (endpoint: string, config = {}) => {
       throw new Error(errorData.message || 'Failed to fetch');
     }
   } catch (error) {
+    console.log("Error is: ", error);
     console.error('Error during request:', error);
     throw error;
   }

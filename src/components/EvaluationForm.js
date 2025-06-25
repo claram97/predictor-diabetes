@@ -18,7 +18,8 @@ export default function EvaluationForm() {
       setResult(null);
 
       try {
-        const requiredFields = {
+        // Obtenemos los valores directamente. Formik ya los maneja como números.
+        const dataToPredict = {
           Pregnancies: values.Pregnancies,
           Glucose: values.Glucose,
           Insulin: values.Insulin,
@@ -27,34 +28,24 @@ export default function EvaluationForm() {
           Age: values.Age
         };
 
-        const stringValues = {};
-        for (const key in requiredFields) {
-          stringValues[key] = String(requiredFields[key]);
-        }
-
-        const dataToPredict = {
-          instances: [stringValues]
-        };
-
-        console.log(dataToPredict);
+        console.log("Enviando estos datos a la API:", dataToPredict);
 
         const predictionData = await predict(dataToPredict);
+        
+        const prediction = predictionData.prediction;
+        const probability = predictionData.probability;
 
-        const firstPrediction = predictionData.predictions[0];
-        const scores = firstPrediction.scores;
-        const classes = firstPrediction.classes;
-
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
-        const predictedClass = classes[maxScoreIndex];
+        const confidence = prediction === 1 ? probability : 1 - probability;
+        
+        const scores = [1 - probability, probability];
 
         setResult({
-          predictedClass: parseInt(predictedClass),
-          confidence: maxScore,
-          allScores: scores.map((score, index) => ({
-            class: classes[index],
-            score: score
-          }))
+          predictedClass: prediction,
+          confidence: confidence,
+          allScores: [
+              { class: '0', score: scores[0] },
+              { class: '1', score: scores[1] }
+          ]
         });
 
       } catch (err) {
@@ -145,29 +136,36 @@ export default function EvaluationForm() {
               {result.predictedClass === 1 ? '⚠️' : '✅'}
             </div>
             <div className={styles.resultContent}>
-              <div className={styles.resultTitle}>
-                {result.predictedClass === 1 ? 'Riesgo Elevado Detectado' : 'Riesgo Bajo Detectado'}
-                <span className={styles.confidenceBadge}>
-                  Confianza: {formatPercent(result.confidence)}
-                </span>
-              </div>
-              <p className={styles.resultText}>
-                {result.predictedClass === 1
-                  ? 'El modelo de IA estima un riesgo elevado de desarrollar Diabetes Mellitus tipo 2. Se recomienda evaluación clínica adicional.'
-                  : 'El modelo de IA estima un riesgo bajo de desarrollar Diabetes Mellitus tipo 2. Continúe con el seguimiento preventivo habitual.'
-                }
-              </p>
+
+              {/* Título Principal */}
+              <h3 className={styles.resultTitle}>
+                Clasificación de Riesgo: {result.predictedClass === 1 ? 'ALTO' : 'Bajo'}
+              </h3>
+
+              {/* Desglose de Probabilidades */}
               <div className={styles.scoresBreakdown}>
                 <div className={styles.scoreItem}>
-                  <span>Prob. Riesgo Bajo (Clase 0):</span>
+                  <span>Probabilidad de Escenario de Riesgo Bajo:</span>
                   <strong>{formatPercent(result.allScores.find(s => s.class === '0').score)}</strong>
                 </div>
                 <div className={styles.scoreItem}>
-                  <span>Prob. Riesgo Alto (Clase 1):</span>
+                  <span>Probabilidad de Escenario de Riesgo Alto:</span>
                   <strong>{formatPercent(result.allScores.find(s => s.class === '1').score)}</strong>
                 </div>
               </div>
+              
+              {/* Interpretación Sugerida */}
+              <div className={styles.resultText}>
+                <h4>Interpretación Sugerida:</h4>
+                <p>
+                  {result.predictedClass === 1
+                    ? 'El modelo clasifica al paciente en la categoría de riesgo alto para el desarrollo de Diabetes Mellitus tipo 2. Este resultado sugiere una probabilidad elevada basada en los parámetros clínicos ingresados. Se recomienda considerar una evaluación clínica detallada y estudios complementarios.'
+                    : 'El modelo clasifica al paciente en la categoría de riesgo bajo para el desarrollo de Diabetes Mellitus tipo 2, basado en los datos proporcionados. Se sugiere mantener el seguimiento clínico preventivo estándar, según el criterio profesional.'
+                  }
+                </p>
+              </div>
 
+              {/* Botones de Acción (sin cambios) */}
               <div className={styles.resultActions}>
                 <button className={styles.actionButton} onClick={() => window.print()}>
                   📄 Imprimir Reporte
@@ -176,9 +174,10 @@ export default function EvaluationForm() {
                   🔄 Nueva Evaluación
                 </button>
               </div>
+
+              {/* Disclaimer (sin cambios) */}
               <div className={styles.resultDisclaimer}>
-                <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico.
-                No reemplaza el criterio clínico profesional ni el diagnóstico médico integral.
+                <strong>Importante:</strong> Esta es una herramienta de soporte para la estratificación de riesgo. No reemplaza el criterio clínico profesional.
               </div>
             </div>
           </div>
