@@ -1,4 +1,5 @@
-export const MODEL_BASE_URL = process.env.NEXT_PUBLIC_MODEL_BASE_URL!;
+// export const MODEL_BASE_URL = process.env.NEXT_PUBLIC_MODEL_BASE_URL!;
+export const MODEL_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_MODEL_BASE_URL!;
 
 export const stdFetch = async (endpoint: string, config = {}) => {
   try {
@@ -11,6 +12,7 @@ export const stdFetch = async (endpoint: string, config = {}) => {
       throw new Error(errorData.message || 'Failed to fetch');
     }
   } catch (error) {
+    console.log("Error is: ", error);
     console.error('Error during request:', error);
     throw error;
   }

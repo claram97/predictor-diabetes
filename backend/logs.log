@@ -1,0 +1,201 @@
+2025-06-24 14:27:07,958:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:27:07,958:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:27:07,958:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:27:07,958:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:27:08,522:INFO:Initializing load_model()
+2025-06-24 14:27:08,522:INFO:load_model(model_name=modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:28:19,380:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:19,380:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:19,380:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:19,380:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:19,810:INFO:Initializing load_model()
+2025-06-24 14:28:19,810:INFO:load_model(model_name=modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:28:59,574:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:59,574:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:59,574:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:28:59,574:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:29:00,006:INFO:Initializing load_model()
+2025-06-24 14:29:00,006:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:29:56,816:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:29:56,816:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:29:56,816:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:29:56,816:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:30:59,203:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:30:59,203:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:30:59,203:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:30:59,203:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:31:40,832:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:31:40,832:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:31:40,832:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:31:40,832:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:31:41,271:INFO:Initializing load_model()
+2025-06-24 14:31:41,271:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:32:26,711:WARNING:/home/claram97/Escritorio/predictor-diabetes/model_training/venv_pycaret/lib/python3.11/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+
+2025-06-24 14:32:37,791:INFO:Initializing predict_model()
+2025-06-24 14:32:37,791:INFO:predict_model(self=<pycaret.classification.oop.ClassificationExperiment object at 0x7805211eab90>, estimator=Pipeline(memory=Memory(location=None),
+         steps=[('numerical_imputer',
+                 TransformerWrapper(include=['Pregnancies', 'Glucose',
+                                             'BloodPressure', 'SkinThickness',
+                                             'Insulin', 'BMI',
+                                             'DiabetesPedigreeFunction',
+                                             'Age'],
+                                    transformer=SimpleImputer())),
+                ('categorical_imputer',
+                 TransformerWrapper(include=[],
+                                    transformer=SimpleImputer(strategy='most_frequent'))),
+                ('normalize', TransformerWrapper(transformer=StandardScaler())),
+                ('actual_estimator', GaussianNB())]), probability_threshold=None, encoded_labels=False, raw_score=False, round=4, verbose=True, ml_usecase=None, preprocess=True, encode_labels=<function _SupervisedExperiment.predict_model.<locals>.encode_labels at 0x78056e586a20>)
+2025-06-24 14:32:37,791:INFO:Checking exceptions
+2025-06-24 14:32:37,791:INFO:Preloading libraries
+2025-06-24 14:32:37,791:INFO:Set up data.
+2025-06-24 14:32:37,793:INFO:Set up index.
+2025-06-24 14:33:18,017:INFO:Initializing predict_model()
+2025-06-24 14:33:18,017:INFO:predict_model(self=<pycaret.classification.oop.ClassificationExperiment object at 0x7805211efe50>, estimator=Pipeline(memory=Memory(location=None),
+         steps=[('numerical_imputer',
+                 TransformerWrapper(include=['Pregnancies', 'Glucose',
+                                             'BloodPressure', 'SkinThickness',
+                                             'Insulin', 'BMI',
+                                             'DiabetesPedigreeFunction',
+                                             'Age'],
+                                    transformer=SimpleImputer())),
+                ('categorical_imputer',
+                 TransformerWrapper(include=[],
+                                    transformer=SimpleImputer(strategy='most_frequent'))),
+                ('normalize', TransformerWrapper(transformer=StandardScaler())),
+                ('actual_estimator', GaussianNB())]), probability_threshold=None, encoded_labels=False, raw_score=False, round=4, verbose=True, ml_usecase=None, preprocess=True, encode_labels=<function _SupervisedExperiment.predict_model.<locals>.encode_labels at 0x7805211e2ca0>)
+2025-06-24 14:33:18,017:INFO:Checking exceptions
+2025-06-24 14:33:18,017:INFO:Preloading libraries
+2025-06-24 14:33:18,017:INFO:Set up data.
+2025-06-24 14:33:18,019:INFO:Set up index.
+2025-06-24 14:33:20,283:WARNING:/home/claram97/Escritorio/predictor-diabetes/model_training/venv_pycaret/lib/python3.11/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+
+2025-06-24 14:35:47,681:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:35:47,681:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:35:47,681:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:35:47,681:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:35:48,113:INFO:Initializing load_model()
+2025-06-24 14:35:48,113:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:36:16,571:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:36:16,571:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:36:16,571:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:36:16,571:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:36:16,994:INFO:Initializing load_model()
+2025-06-24 14:36:16,994:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:36:21,847:INFO:Initializing predict_model()
+2025-06-24 14:36:21,847:INFO:predict_model(self=<pycaret.classification.oop.ClassificationExperiment object at 0x70e50ffcde90>, estimator=Pipeline(memory=Memory(location=None),
+         steps=[('numerical_imputer',
+                 TransformerWrapper(include=['Pregnancies', 'Glucose',
+                                             'BloodPressure', 'SkinThickness',
+                                             'Insulin', 'BMI',
+                                             'DiabetesPedigreeFunction',
+                                             'Age'],
+                                    transformer=SimpleImputer())),
+                ('categorical_imputer',
+                 TransformerWrapper(include=[],
+                                    transformer=SimpleImputer(strategy='most_frequent'))),
+                ('normalize', TransformerWrapper(transformer=StandardScaler())),
+                ('actual_estimator', GaussianNB())]), probability_threshold=None, encoded_labels=False, raw_score=False, round=4, verbose=True, ml_usecase=None, preprocess=True, encode_labels=<function _SupervisedExperiment.predict_model.<locals>.encode_labels at 0x70e514101da0>)
+2025-06-24 14:36:21,847:INFO:Checking exceptions
+2025-06-24 14:36:21,847:INFO:Preloading libraries
+2025-06-24 14:36:21,847:INFO:Set up data.
+2025-06-24 14:36:21,849:INFO:Set up index.
+2025-06-24 14:36:30,291:WARNING:/home/claram97/Escritorio/predictor-diabetes/model_training/venv_pycaret/lib/python3.11/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+
+2025-06-24 14:37:27,972:WARNING:/home/claram97/Escritorio/predictor-diabetes/model_training/venv_pycaret/lib/python3.11/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+
+2025-06-24 14:39:34,718:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:39:34,718:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:39:34,718:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:39:34,718:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:39:35,192:INFO:Initializing load_model()
+2025-06-24 14:39:35,192:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:39:49,362:WARNING:/home/claram97/Escritorio/predictor-diabetes/model_training/venv_pycaret/lib/python3.11/site-packages/sklearn/base.py:493: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+
+2025-06-24 14:39:56,863:INFO:Initializing predict_model()
+2025-06-24 14:39:56,863:INFO:predict_model(self=<pycaret.classification.oop.ClassificationExperiment object at 0x7b64d14d6f10>, estimator=Pipeline(memory=Memory(location=None),
+         steps=[('numerical_imputer',
+                 TransformerWrapper(include=['Pregnancies', 'Glucose',
+                                             'BloodPressure', 'SkinThickness',
+                                             'Insulin', 'BMI',
+                                             'DiabetesPedigreeFunction',
+                                             'Age'],
+                                    transformer=SimpleImputer())),
+                ('categorical_imputer',
+                 TransformerWrapper(include=[],
+                                    transformer=SimpleImputer(strategy='most_frequent'))),
+                ('normalize', TransformerWrapper(transformer=StandardScaler())),
+                ('actual_estimator', GaussianNB())]), probability_threshold=None, encoded_labels=False, raw_score=False, round=4, verbose=True, ml_usecase=None, preprocess=True, encode_labels=<function _SupervisedExperiment.predict_model.<locals>.encode_labels at 0x7b64d1292020>)
+2025-06-24 14:39:56,863:INFO:Checking exceptions
+2025-06-24 14:39:56,863:INFO:Preloading libraries
+2025-06-24 14:39:56,863:INFO:Set up data.
+2025-06-24 14:39:56,866:INFO:Set up index.
+2025-06-24 14:40:44,812:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:40:44,812:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:40:44,812:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:40:44,812:WARNING:
+'cuml' is a soft dependency and not included in the pycaret installation. Please run: `pip install cuml` to install.
+2025-06-24 14:40:45,258:INFO:Initializing load_model()
+2025-06-24 14:40:45,258:INFO:load_model(model_name=../model_training/modelo_diabetes_pycaret, platform=None, authentication=None, verbose=True)
+2025-06-24 14:40:50,462:INFO:Initializing predict_model()
+2025-06-24 14:40:50,462:INFO:predict_model(self=<pycaret.classification.oop.ClassificationExperiment object at 0x7bce8d600250>, estimator=Pipeline(memory=Memory(location=None),
+         steps=[('numerical_imputer',
+                 TransformerWrapper(include=['Pregnancies', 'Glucose',
+                                             'BloodPressure', 'SkinThickness',
+                                             'Insulin', 'BMI',
+                                             'DiabetesPedigreeFunction',
+                                             'Age'],
+                                    transformer=SimpleImputer())),
+                ('categorical_imputer',
+                 TransformerWrapper(include=[],
+                                    transformer=SimpleImputer(strategy='most_frequent'))),
+                ('normalize', TransformerWrapper(transformer=StandardScaler())),
+                ('actual_estimator', GaussianNB())]), probability_threshold=None, encoded_labels=False, raw_score=False, round=4, verbose=True, ml_usecase=None, preprocess=True, encode_labels=<function _SupervisedExperiment.predict_model.<locals>.encode_labels at 0x7bce8d50ede0>)
+2025-06-24 14:40:50,462:INFO:Checking exceptions
+2025-06-24 14:40:50,462:INFO:Preloading libraries
+2025-06-24 14:40:50,462:INFO:Set up data.
+2025-06-24 14:40:50,464:INFO:Set up index.

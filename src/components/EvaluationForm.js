@@ -7,9 +7,8 @@ import styles from '../app/evaluacion/evaluation.module.css';
 import { predict } from '../services';
 
 export default function EvaluationForm() {
-  const token = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const [apiError, setApiError] = useState(null);
-    const [result, setResult] = useState(null);
+  const [result, setResult] = useState(null);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -19,35 +18,34 @@ export default function EvaluationForm() {
       setResult(null);
 
       try {
-        const stringValues = {};
-        for (const key in values) {
-          stringValues[key] = String(values[key]);
-        }
-
+        // Obtenemos los valores directamente. Formik ya los maneja como números.
         const dataToPredict = {
-          instances: [stringValues] 
+          Pregnancies: values.Pregnancies,
+          Glucose: values.Glucose,
+          Insulin: values.Insulin,
+          BMI: values.BMI,
+          DiabetesPedigreeFunction: values.DiabetesPedigreeFunction,
+          Age: values.Age
         };
 
-        console.log(dataToPredict);
-        
-        const predictionData = await predict(dataToPredict, token);
-        
-        const firstPrediction = predictionData.predictions[0];
-        const scores = firstPrediction.scores;
-        const classes = firstPrediction.classes;
+        console.log("Enviando estos datos a la API:", dataToPredict);
 
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
+        const predictionData = await predict(dataToPredict);
         
-        const predictedClass = classes[maxScoreIndex];
+        const prediction = predictionData.prediction;
+        const probability = predictionData.probability;
+
+        const confidence = prediction === 1 ? probability : 1 - probability;
+        
+        const scores = [1 - probability, probability];
 
         setResult({
-          predictedClass: parseInt(predictedClass),
-          confidence: maxScore,
-          allScores: scores.map((score, index) => ({
-            class: classes[index],
-            score: score
-          }))
+          predictedClass: prediction,
+          confidence: confidence,
+          allScores: [
+              { class: '0', score: scores[0] },
+              { class: '1', score: scores[1] }
+          ]
         });
 
       } catch (err) {
@@ -85,9 +83,8 @@ export default function EvaluationForm() {
                     name={field.name}
                     type="number"
                     step={field.step}
-                    className={`${styles.input} ${
-                      formik.touched[field.name] && formik.errors[field.name] ? styles.inputError : ''
-                    } ${formik.touched[field.name] && !formik.errors[field.name] ? styles.inputSuccess : ''}`}
+                    className={`${styles.input} ${formik.touched[field.name] && formik.errors[field.name] ? styles.inputError : ''
+                      } ${formik.touched[field.name] && !formik.errors[field.name] ? styles.inputSuccess : ''}`}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values[field.name]}
@@ -108,9 +105,9 @@ export default function EvaluationForm() {
           </div>
 
           <div className={styles.submitSection}>
-            <button 
-              type="submit" 
-              className={styles.submitButton} 
+            <button
+              type="submit"
+              className={styles.submitButton}
               disabled={formik.isSubmitting || !formik.isValid}
             >
               <span className={styles.buttonText}>
@@ -123,56 +120,64 @@ export default function EvaluationForm() {
             </button>
           </div>
         </form>
-          {apiError && (
-            <div className={`${styles.resultCard} ${styles.errorCard}`}>
-              <div className={styles.resultIcon}>❌</div>
-              <div className={styles.resultContent}>
-                <div className={styles.resultTitle}>Error en el Procesamiento</div>
-                <p className={styles.resultText}>{apiError}</p>
-              </div>
+        {apiError && (
+          <div className={`${styles.resultCard} ${styles.errorCard}`}>
+            <div className={styles.resultIcon}>❌</div>
+            <div className={styles.resultContent}>
+              <div className={styles.resultTitle}>Error en el Procesamiento</div>
+              <p className={styles.resultText}>{apiError}</p>
             </div>
-          )}
+          </div>
+        )}
 
-           {result !== null && (
+        {result !== null && (
           <div className={`${styles.resultCard} ${result.predictedClass === 1 ? styles.riesgoAlto : styles.riesgoBajo}`}>
             <div className={styles.resultIcon}>
               {result.predictedClass === 1 ? '⚠️' : '✅'}
             </div>
             <div className={styles.resultContent}>
-              <div className={styles.resultTitle}>
-                {result.predictedClass === 1 ? 'Riesgo Elevado Detectado' : 'Riesgo Bajo Detectado'}
-                <span className={styles.confidenceBadge}>
-                  Confianza: {formatPercent(result.confidence)}
-                </span>
-              </div>
-              <p className={styles.resultText}>
-                {result.predictedClass === 1
-                  ? 'El modelo de IA estima un riesgo elevado de desarrollar Diabetes Mellitus tipo 2. Se recomienda evaluación clínica adicional.'
-                  : 'El modelo de IA estima un riesgo bajo de desarrollar Diabetes Mellitus tipo 2. Continúe con el seguimiento preventivo habitual.'
-                }
-              </p>
-                <div className={styles.scoresBreakdown}>
+
+              {/* Título Principal */}
+              <h3 className={styles.resultTitle}>
+                Clasificación de Riesgo: {result.predictedClass === 1 ? 'ALTO' : 'Bajo'}
+              </h3>
+
+              {/* Desglose de Probabilidades */}
+              <div className={styles.scoresBreakdown}>
                 <div className={styles.scoreItem}>
-                  <span>Prob. Riesgo Bajo (Clase 0):</span>
+                  <span>Probabilidad de Escenario de Riesgo Bajo:</span>
                   <strong>{formatPercent(result.allScores.find(s => s.class === '0').score)}</strong>
                 </div>
                 <div className={styles.scoreItem}>
-                  <span>Prob. Riesgo Alto (Clase 1):</span>
+                  <span>Probabilidad de Escenario de Riesgo Alto:</span>
                   <strong>{formatPercent(result.allScores.find(s => s.class === '1').score)}</strong>
                 </div>
               </div>
+              
+              {/* Interpretación Sugerida */}
+              <div className={styles.resultText}>
+                <h4>Interpretación Sugerida:</h4>
+                <p>
+                  {result.predictedClass === 1
+                    ? 'El modelo clasifica al paciente en la categoría de riesgo alto para el desarrollo de Diabetes Mellitus tipo 2. Este resultado sugiere una probabilidad elevada basada en los parámetros clínicos ingresados. Se recomienda considerar una evaluación clínica detallada y estudios complementarios.'
+                    : 'El modelo clasifica al paciente en la categoría de riesgo bajo para el desarrollo de Diabetes Mellitus tipo 2, basado en los datos proporcionados. Se sugiere mantener el seguimiento clínico preventivo estándar, según el criterio profesional.'
+                  }
+                </p>
+              </div>
 
+              {/* Botones de Acción (sin cambios) */}
               <div className={styles.resultActions}>
                 <button className={styles.actionButton} onClick={() => window.print()}>
                   📄 Imprimir Reporte
                 </button>
-                <button className={styles.actionButton} onClick={() => {formik.resetForm(); setResult(null)}}>
+                <button className={styles.actionButton} onClick={() => { formik.resetForm(); setResult(null) }}>
                   🔄 Nueva Evaluación
                 </button>
               </div>
+
+              {/* Disclaimer (sin cambios) */}
               <div className={styles.resultDisclaimer}>
-                <strong>Importante:</strong> Esta evaluación es una herramienta de apoyo diagnóstico. 
-                No reemplaza el criterio clínico profesional ni el diagnóstico médico integral.
+                <strong>Importante:</strong> Esta es una herramienta de soporte para la estratificación de riesgo. No reemplaza el criterio clínico profesional.
               </div>
             </div>
           </div>
