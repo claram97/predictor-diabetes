@@ -12,7 +12,7 @@ export default function StatsSection() {
         <div className={styles.statLabel}>Casos de Entrenamiento</div>
       </div>
       <div className={styles.stat}>
-        <div className={styles.statNumber}>8</div>
+        <div className={styles.statNumber}>6</div>
         <div className={styles.statLabel}>Parámetros Clínicos</div>
       </div>
     </div>
